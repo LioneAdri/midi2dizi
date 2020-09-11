@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Midi 2 Dizi/Xiao</title>
+        <meta charset="UTF-8">
+        <meta name="keywords" content=">numbered musical notation, dizi, xiao, flute, sheet, music, sheetmusic, midi, parser, midi to sheetmusic, xiao flute, dizi flute, fingering, chart, fingering chart, converter, notation, numbered">
+        <meta name="description" content="This version of Midi converter is made for basic Midi files. This can make Numbered musical notation sheet music from only one Track. Minimum note length can be 1/16, and no grace notes, no bends, no vibrato, no tempo changing.">
+        <meta name="author" content="Adrienn Sallai">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/style.css">
+        <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="js/jquery.form.min.js"></script>
+        <script type="text/javascript" src="js/main.js"></script>
+        <meta property="og:title" content="Midi 2 Dizi/Xiao"/>
+        <meta property="og:description" content="This version of Midi converter is made for basic Midi files. This can make Numbered musical notation from only one Track. Minimum note length can be 1/16, and no grace notes, no bends, no vibrato, no tempo changing."/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" content="img/cover.png"/>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-inverse navbar-transparent navbar-fixed-top navbar-regular affix-top noprint" id="navbar-regular" >
+            <div class="container">
+                <div class="navbar-header">
+                    <span class="navbar-brand">
+                        Midi 2 Dizi/Xiao
+                    </span>
+                    <p>Numbered musical notation generator for Dizi/Xiao beginners</p>
+                </div>
+                <div class="dropdown dropdown-nav">
+                    <button id="about" class="btn btn-dark btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                        <span class="glyphicon glyphicon-info-sign"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
+                        <li role="presentation" class="info" >
+                            Adrienn Sallai (Lione)
+                            <span class="cryptedmail" data-surname="sallai" data-forename="adrienn" data-domain="gmail" data-tld="com"></span>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="feature-element fit-window feature-element-form noprint" >
+            <div class="container-wrapper container-wrapper-form ">
+                <div class="container">
+                    <div class="row col-sm-8 col-md-6">
+                        <form id="uploadMidi" role="form" class="form-horizontal" data-toggle="validator" action="router.php" method="post">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Flute:</label>
+                                <div class="col-sm-10">
+                                    <label class="radio-inline"><input type="radio" value="dizi" name="flute" checked>Dizi</label>
+                                    <label class="radio-inline"><input type="radio" value="xiao" name="flute">Xiao</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Note:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" name="baseNote" required>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2">Midi:</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group" id="filenamegroup">
+                                        <span class="input-group-btn">
+                                            <span class="btn btn-default btn-file">
+                                                Browse...
+                                                <input accept="audio/midi" name="midi" id="midi" type="file">
+                                            </span>
+                                        </span>
+                                        <input readonly="readonly" placeholder="Midi file" class="form-control" name="filename" id="filename" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="dropdown pull-right">
+                                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Try demo
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
+                                            <li role="presentation" class="demo" id="scales">
+                                                <a role="menuitem" tabindex="-1" href="#">
+                                                    <span class="menuicon glyphicon glyphicon-music"></span><span class="menutext">Scales</span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation" class="divider"></li>
+                                        </ul>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary pull-right" style="margin-right:10px;">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 col-md-6">
+                            <div class="description">
+                                This version of Midi converter is made for basic Midi files.
+                                This can make a simple <a href="https://en.wikipedia.org/wiki/Numbered_musical_notation" target="_blank">Numbered musical notation</a> (for Dizi/Xiao) from only one Track.
+                                Minimum note length can be 1/16, it allows single dotted note, and no grace notes, no bends, no vibrato, no tempo changing, etc.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="feature-element fit-window feature-element-result noprint" >
+            <div class="container-wrapper container-wrapper-form ">
+                <div class="container">
+                    <div id="songAlert" class="song" style="display:none">
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="feature-element fit-window feature-element-result" >
+            <div class="container-wrapper container-wrapper-form ">
+                <div class="container">
+                    <div id="song" class="row col-sm-12" style="display:none">
+                        <span id="print" class="glyphicon glyphicon-print noprint" aria-hidden="true" data-toggle="tooltip" data-placement="left" title="Print notation"></span>
+                        <div id="songTitle" class="song">
+
+                        </div>
+                        <div id="songMeta" class="song">
+
+                        </div>
+                        <div id="songResult" class="song">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </body>
+</html>
