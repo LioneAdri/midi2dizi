@@ -28,11 +28,11 @@
                     </span>
                     <p>Numbered musical notation generator for Dizi/Xiao beginners</p>
                 </div>
-                <div class="dropdown dropdown-nav">
-                    <button id="about" class="btn btn-dark btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                <div class="dropdown dropdown-nav" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="About author">
+                    <button id="about" class="btn btn-dark btn-default dropdown-toggle" type="button" data-toggle="dropdown" >
                         <span class="glyphicon glyphicon-info-sign"></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
                         <li role="presentation" class="info" >
                             Adrienn Sallai (Lione)
                             <span class="cryptedmail" data-surname="sallai" data-forename="adrienn" data-domain="gmail" data-tld="com"></span>
@@ -84,12 +84,50 @@
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
-                                            <li role="presentation" class="demo" id="scales">
-                                                <a role="menuitem" tabindex="-1" href="#">
-                                                    <span class="menuicon glyphicon glyphicon-music"></span><span class="menutext">Scales</span>
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" class="demo" id="Scales" >
+                                                    <span class="menuicon glyphicon glyphicon-music"></span>
+                                                    <span class="menutext">
+                                                        Scales: F/G Xiao and chromatic scale
+                                                    </span>
                                                 </a>
                                             </li>
                                             <li role="presentation" class="divider"></li>
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" class="demo" id="Four Seasons Xiao G" >
+                                                    <span class="menuicon glyphicon glyphicon-music"></span>
+                                                    <span class="menutext">
+                                                        Four Seasons: G Xiao
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation" class="divider"></li>
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" class="demo" id="Four Seasons Dizi D" >
+                                                    <span class="menuicon glyphicon glyphicon-music"></span>
+                                                    <span class="menutext">
+                                                        Four Seasons: D Dizi
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation" class="divider"></li>
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" class="demo" id="Descendants of the Dragon Xiao F" >
+                                                    <span class="menuicon glyphicon glyphicon-music"></span>
+                                                    <span class="menutext">
+                                                        Descendants of the Dragon: F Xiao
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li role="presentation" class="divider"></li>
+                                            <li role="presentation">
+                                                <a role="menuitem" tabindex="-1" class="demo" id="Descendants of the Dragon Dizi C" >
+                                                    <span class="menuicon glyphicon glyphicon-music"></span>
+                                                    <span class="menutext">
+                                                        Descendants of the Dragon: C Dizi
+                                                    </span>
+                                                </a>
+                                            </li>
                                         </ul>
                                     </div>
                                     <button type="submit" class="btn btn-primary pull-right" style="margin-right:10px;">Submit</button>

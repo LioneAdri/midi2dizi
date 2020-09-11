@@ -73,6 +73,9 @@ li.info {
 .dropdown-menu > li > a > .menutext {
     font-size: 14px;
 }
+.dropdown-menu > li > a {
+    cursor: pointer;
+}
 .btn-dark, .btn-dark:focus {
     color: #e6e6e6 !important;
     background-color: #343a40 !important;
@@ -233,6 +236,9 @@ span.red {
 @media (max-width: 520px) {
     .navbar-header p {
         display: none;
+    }
+    .navbar-header {
+        margin-top: 15px;
     }
 }
 @media print {

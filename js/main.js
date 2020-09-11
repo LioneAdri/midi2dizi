@@ -136,6 +136,28 @@ $(document).ready(function () {
     });
 
     /**
+     * on select a demo song
+     */
+    $('.demo').on("click", function() {
+        var url = $( "#uploadMidi" ).serialize();
+        var json = JSON.parse('{"' + url.replace(/&/g, '","').replace(/=/g,'":"') + '"}', function(key, value) { return key===""?value:decodeURIComponent(value) })
+        json.demo = $(this).attr('id');
+        $("#songAlert").hide();
+        $("#songTitle").hide();
+        $("#songMeta").hide();
+        $("#songresult").hide();
+        $("#song").hide(1000);
+        $.ajax({
+            type: "POST",
+            url: "router.php",
+            data: json,
+            success: function (responseText) {
+                showSong(responseText);
+            },
+        });
+    });
+
+    /**
      * validate the form
      */
     $('#uploadMidi').validate({ // initialize the plugin
