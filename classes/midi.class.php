@@ -489,9 +489,9 @@ function importMid($smf_path){
 	fclose($SMF);
 	if (strpos($song,'MThd')>0) $song = substr($song,strpos($song,'MThd'));//get rid of RMID header
 	$header = substr($song,0,14);
-	if (substr($header,0,8)!="MThd\0\0\0\6") _err('wrong MIDI-header');
+	if (substr($header,0,8)!="MThd\0\0\0\6") _err('Not a MIDI file or wrong MIDI-header');
 	$type = ord($header[9]);
-	if ($type>1) _err('only SMF Typ 0 and 1 supported');
+	if ($type>1) _err('Only SMF Type 0 and 1 supported');
 	//$trackCnt = ord($header[10])*256 + ord($header[11]); //ignore
 	$timebase = ord($header[12])*256 + ord($header[13]);
 

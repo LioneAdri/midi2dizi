@@ -106,6 +106,28 @@ function loadDataToSelect (flute) {
     });
 }
 
+function checkMidi (validator) {
+    $( "#uploadMidi" ).ajaxSubmit({
+        data: {
+            check: true
+        },
+        success: function (responseText, statusText, xhr, $form) {
+            var res = JSON.parse(responseText);
+            if (res.success) {
+                $("#songAlert").hide();
+                $("#track").attr('max',res.tracks)
+                if (parseInt(res.tracks) < parseInt($("#track").val())) {
+                    $("#track").val(res.tracks);
+                }
+            } else {
+                validator.showErrors({
+                    "midi": res.alert
+                });
+            }
+        }
+    });
+}
+
 /**
  * when document is ready
  */
@@ -132,8 +154,51 @@ $(document).ready(function () {
             files = input.get(0).files,
             text = $(this).parents('.input-group').find('#filename');
         text.val(files[0].name);
-        $( "#uploadMidi" ).valid();
+        var validator = $("#uploadMidi").validate();
+        checkMidi(validator);
     });
+
+    /**
+     * number fields
+     */
+    $('.spinner .btn:first-of-type').on('click', function() {
+        var input = $(this).parent().parent().children('input');
+        var max = input.attr('max');
+        var val = input.val()
+        if (val == "") {
+            val = 0;
+        }
+        var newvalue = parseInt(val, 10) + 1;
+        if (newvalue <= parseInt(max, 10)) {
+            input.val(newvalue);
+        }
+    });
+    $('.spinner .btn:last-of-type').on('click', function() {
+        var input = $(this).parent().parent().children('input');
+        var min = input.attr('min');
+        var val = input.val()
+        if (val == "") {
+            val = 0;
+        }
+        var newvalue = parseInt(val, 10) - 1;
+        if (newvalue >= parseInt(min, 10)) {
+            input.val(newvalue);
+        }
+    });
+    $(document).on('change', '.number-control', function() {
+        var min = $(this).attr('min');
+        var max = $(this).attr('max');
+        if (isNaN($(this).val())) {
+            $(this).val(0);
+        }
+        if (parseInt($(this).val(), 10) > parseInt(max, 10)) {
+            $(this).val(max);
+        }
+        if (parseInt($(this).val(), 10) < parseInt(min, 10)) {
+            $(this).val(min);
+        }
+    });
+
 
     /**
      * on select a demo song
@@ -175,6 +240,10 @@ $(document).ready(function () {
         errorPlacement: function(error, element) { // where to show error msg
             if (element.attr("name") == "midi") {
                 error.insertAfter("#filenamegroup");
+            } else if (element.attr("name") == "track") {
+                error.insertAfter("#trackgroup");
+            } else if (element.attr("name") == "transpose") {
+                error.insertAfter("#transposegroup");
             } else {
                 error.insertAfter(element);
             }

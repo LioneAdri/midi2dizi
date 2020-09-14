@@ -119,6 +119,58 @@ input[readonly] {
     cursor: text !important;
 }
 
+.spinner {
+    margin-bottom: 13px;
+}
+
+.spinner input {
+    text-align: right;
+}
+
+.input-group-btn-vertical {
+    position: relative;
+    white-space: nowrap;
+    width: 1%;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.input-group-btn-vertical > .btn {
+    display: block;
+    float: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 8px;
+    margin-left: -1px;
+    position: relative;
+    border-radius: 0;
+}
+
+.input-group-btn-vertical > .btn:first-child {
+    border-top-right-radius: 4px;
+}
+
+.input-group-btn-vertical > .btn:last-child {
+    margin-top: -2px;
+    border-bottom-right-radius: 4px;
+}
+
+.input-group-btn-vertical i {
+    position: absolute;
+    top: 0;
+    left: 4px;
+}
+
+i.glyphicon-plus {
+    margin-top: 3px;
+    font-size: 10px !important;
+}
+
+i.glyphicon-minus {
+    margin-top: 4px;
+    font-size: 10px !important;
+}
+
 /* song data fields */
 #song {
     -webkit-box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
@@ -161,9 +213,6 @@ input[readonly] {
     margin-right: 20px;
     margin-bottom: 20px;
 }
-span.note {
-
-}
 span.kern10 {
     margin-left: -11px;
 }
@@ -191,8 +240,8 @@ span.kern20 {
 span.kern25 {
      margin-left: -24px;
 }
-span.regular {
-    cursor: pointer;
+span.note {
+    cursor: help;
 }
 span.gray {
     color: #646464;
@@ -211,6 +260,11 @@ span.red {
     }
     #song {
         padding: 20px;
+    }
+}
+@media (min-width: 768px) {
+    .form-horizontal .control-label {
+        padding-left: 0px;
     }
 }
 @media (max-width: 767px) {
