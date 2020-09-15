@@ -20,6 +20,14 @@ class Dizi extends Midi {
     var $valid = true;
     // xiao: F4/G4
     // dizi: C5, D5, E5, F5, E5
+    /**
+     * @var mixed
+     */
+    private $fluteMapArray;
+    /**
+     * @var mixed
+     */
+    private $noteMapArray;
 
     /****************************************************************************
     *                                                                           *
@@ -29,17 +37,19 @@ class Dizi extends Midi {
 
     /**
      * @param string $title
-     * @param int $tn track number
      * @param string $baseNote
      * @param string $flute
+     * @param int $tn track number
      * @return string
      */
     function getNotes($title = '', $baseNote = "C5", $flute = "dizi", $tn = -1) {
 
         $this->baseNote = $baseNote;
         $this->flute = $flute;
+        $this->_readFluteMap();
+        $this->_readNoteMap();
         
-        if ($tn < 0) {
+        if ($tn <= 0) {
             $track = $this->_findFirstContentTrack();
         }
         else {
@@ -58,16 +68,7 @@ class Dizi extends Midi {
             $line = $track[$i];
             $msg = explode(' ', $line);
 
-            // try to get title from meta event
-            if ($title == '' && $msg[1] == 'Meta' && $msg[2] == 'TrkName') {
-                $title = trim($msg[3]);
-                if ($title{0} == '"') {
-                    $title = substr($title, 1);
-                }
-                if ($title{strlen($title)-1} == '"') {
-                    $title = substr($title, 0, -1);
-                }
-            }
+            $title = $this->_findTrackName ($title, $msg);
 
             if ($msg[1] == 'On' && $msg[4] != 'v=0') {
                 $time = $msg[0];
@@ -163,7 +164,7 @@ class Dizi extends Midi {
 
         $result = str_replace("&nbsp;&nbsp;","&nbsp;",implode('&nbsp;| ', $commands));
 
-        $diziArray = array( // TODO
+        $diziArray = array(
             'success' => true,
             "valid" => $this->valid,
             "alert" => $this->valid ? "" : "You may can't play this song, because it contains notes, that your flute does not have. Change the instrument, or choose an other song.",
@@ -184,6 +185,21 @@ class Dizi extends Midi {
     *                                                                           *
     ****************************************************************************/
 
+    function _findTrackName ($title, $msg) {
+        // try to get title from meta event
+        if ($title == '' && $msg[1] == 'Meta' && $msg[2] == 'TrkName') {
+            $title = trim($msg[3]);
+            if ($title{0} == '"') {
+                $title = substr($title, 1);
+            }
+            if ($title{strlen($title)-1} == '"') {
+                $title = substr($title, 0, -1);
+            }
+        }
+        // TODO [0] track
+        return $title;
+    }
+
     //---------------------------------------------------------------
     // finds first track containing note on events
     //---------------------------------------------------------------
@@ -202,6 +218,7 @@ class Dizi extends Midi {
     //---------------------------------------------------------------
     // handles dotted notes
     //---------------------------------------------------------------
+
     function _checkDotted($quarters){
         $dotted = array(6, 3, 3/2, 3/4, 3/8, 3/16);
         foreach ($dotted as $test)
@@ -210,13 +227,17 @@ class Dizi extends Midi {
                 return array('.', $quarters*2/3);
         return array('', $quarters);
     }
-    
+
+    function _readFluteMap () {
+        $string = file_get_contents("json/fluteMap.json");
+        $this->fluteMapArray = json_decode($string, true);
+    }
+
     function _getFluteMap ($note) {
         $baseNote = $this->baseNote;
         $flute = $this->flute;
 
-        $string = file_get_contents("json/fluteMap.json");
-        $fluteMapArray = json_decode($string, true);
+        $fluteMapArray = $this->fluteMapArray;
 
         $fluteMap = $fluteMapArray[$flute][$baseNote];
         if (array_key_exists($note, $fluteMap)) {
@@ -231,6 +252,13 @@ class Dizi extends Midi {
             $this->valid = false;
             return array ("value"=>$note, "valid"=>-1);
         }
+
+    }
+
+    function _readNoteMap () {
+
+        $string = file_get_contents("json/noteMap.json");
+        $this->noteMapArray = json_decode($string, true);
 
     }
 
