@@ -15,7 +15,7 @@ if (isset($_POST)) {
         $bn = $_POST['demo'];
     }  else {
         $file = (isset($_FILES['midi']) && $_FILES['midi']['tmp_name'] != '') ? $_FILES['midi']['tmp_name'] : '';
-        $tn = $_POST['track'];
+        $tn = ($_POST['track'] != '' ? $_POST['track'] : 0);
         $fn = isset($_POST['demo']) ? $_POST['demo'] : $_FILES['midi']['name'];
         $bn = strtok($fn, '.');
     }
@@ -29,7 +29,10 @@ if (isset($_POST)) {
             echo json_encode(array ('success' => false, 'alert' =>  $e->getMessage()));
             return;
         }
-        echo $midi->getNotes($bn, $_POST['baseNote'], $_POST['flute'], $tn);
+
+        $tr = ($_POST['transpose'] != '' ? $_POST['transpose'] : 0);
+
+        echo $midi->getNotes($bn, $_POST['baseNote'], $_POST['flute'], $tn, $tr);
         return;
     }
 

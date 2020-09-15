@@ -40,9 +40,10 @@ class Dizi extends Midi {
      * @param string $baseNote
      * @param string $flute
      * @param int $tn track number
+     * @param int $tr transpose
      * @return string
      */
-    function getNotes($title = '', $baseNote = "C5", $flute = "dizi", $tn = -1) {
+    public function getNotes($title = '', $baseNote = "C5", $flute = "dizi", $tn = -1, $tr = 0) {
 
         $this->baseNote = $baseNote;
         $this->flute = $flute;
@@ -50,11 +51,17 @@ class Dizi extends Midi {
         $this->_readNoteMap();
         
         if ($tn <= 0) {
+            if ($tr != 0) {
+                $this->transpose($tr);
+            }
             $track = $this->_findFirstContentTrack();
-        }
-        else {
+        } else {
+            if ($tr != 0) {
+                $this->transposeTrack($tn, $tr);
+            }
             $track = $this->getTrack($tn);
         }
+
         $commands = array();
         $last = 0;
         $dt = 0;
@@ -185,7 +192,12 @@ class Dizi extends Midi {
     *                                                                           *
     ****************************************************************************/
 
-    function _findTrackName ($title, $msg) {
+    /**
+     * @param $title
+     * @param $msg
+     * @return false|string
+     */
+    private function _findTrackName ($title, $msg) {
         // try to get title from meta event
         if ($title == '' && $msg[1] == 'Meta' && $msg[2] == 'TrkName') {
             $title = trim($msg[3]);
@@ -200,10 +212,11 @@ class Dizi extends Midi {
         return $title;
     }
 
-    //---------------------------------------------------------------
-    // finds first track containing note on events
-    //---------------------------------------------------------------
-    function _findFirstContentTrack(){
+    /**
+     * finds first track containing note on events
+     * @return false|mixed
+     */
+    private function _findFirstContentTrack(){
         if ($this->type==0) return $this->tracks[0];
         else {
             foreach ($this->tracks as $track)
@@ -215,11 +228,12 @@ class Dizi extends Midi {
         return false;
     }
 
-    //---------------------------------------------------------------
-    // handles dotted notes
-    //---------------------------------------------------------------
-
-    function _checkDotted($quarters){
+    /**
+     * handles dotted notes
+     * @param $quarters
+     * @return array
+     */
+    private function _checkDotted($quarters){
         $dotted = array(6, 3, 3/2, 3/4, 3/8, 3/16);
         foreach ($dotted as $test)
             // to avoid rounding errors check for +/- 10%
@@ -228,12 +242,19 @@ class Dizi extends Midi {
         return array('', $quarters);
     }
 
-    function _readFluteMap () {
+    /**
+     * reads flute map json file
+     */
+    private function _readFluteMap () {
         $string = file_get_contents("json/fluteMap.json");
         $this->fluteMapArray = json_decode($string, true);
     }
 
-    function _getFluteMap ($note) {
+    /**
+     * @param $note
+     * @return array|mixed
+     */
+    private function _getFluteMap ($note) {
         $baseNote = $this->baseNote;
         $flute = $this->flute;
 
@@ -255,14 +276,23 @@ class Dizi extends Midi {
 
     }
 
-    function _readNoteMap () {
+    /**
+     * reads note map json file
+     */
+    private function _readNoteMap () {
 
         $string = file_get_contents("json/noteMap.json");
         $this->noteMapArray = json_decode($string, true);
 
     }
 
-    function _getTempoMap ($num,$dot,$break = false) {
+    /**
+     * @param $num
+     * @param $dot
+     * @param false $break
+     * @return string|string[]
+     */
+    private function _getTempoMap ($num,$dot,$break = false) {
         $string = "</span>";
         switch ($num) {
             case 1:
