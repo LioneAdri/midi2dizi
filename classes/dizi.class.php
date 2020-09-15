@@ -166,7 +166,7 @@ class Dizi extends Midi {
 
         }// for
 
-        $title = ($title=='')?'song':trim(substr($title, 0, 10));
+        $title = ($title == '') ? 'song' : trim($title);
         //$dizistring = $this->valid." ".$this->timeSig." !=".$this->getBpm()." { " . implode(' | ', $commands)." }";
 
         $result = str_replace("&nbsp;&nbsp;","&nbsp;",implode('&nbsp;| ', $commands));
@@ -197,18 +197,39 @@ class Dizi extends Midi {
      * @param $msg
      * @return false|string
      */
-    private function _findTrackName ($title, $msg) {
-        // try to get title from meta event
-        if ($title == '' && $msg[1] == 'Meta' && $msg[2] == 'TrkName') {
+    private function _parseTrackName ($title, $msg) {
+        if ($msg[1] == 'Meta' && $msg[2] == 'TrkName') {
             $title = trim($msg[3]);
+            if (count($msg) > 4) {
+                for ($i = 4; $i < count($msg); $i++) {
+                    $title .= " " . trim($msg[$i]);
+                }
+            }
             if ($title{0} == '"') {
                 $title = substr($title, 1);
             }
-            if ($title{strlen($title)-1} == '"') {
+            if ($title{strlen($title) - 1} == '"') {
                 $title = substr($title, 0, -1);
             }
         }
-        // TODO [0] track
+        return $title;
+    }
+    /**
+     * @param $title
+     * @param $msg
+     * @return false|string
+     */
+    private function _findTrackName ($title, $msg) {
+
+        $track = $this->getTrack(0);
+        $line = $track[0];
+        $msg2 = explode(' ', $line);
+        $title = _parseTrackName($title, $msg2);
+
+        if ($title == "") {
+            $title = _parseTrackName($title, $msg);
+        }
+
         return $title;
     }
 
